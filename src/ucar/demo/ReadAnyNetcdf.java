@@ -52,21 +52,58 @@ public class ReadAnyNetcdf {
 				}
 				
 				int[] nVar = var.getLengths();
+				int[] ix = new int[nVar.length];
+				
 				if(nVar.length==0) {
 					System.out.println(var.get(nVar));
-				} else  if(nVar.length==1){
-					for (int i=0; i<nVar[0]; i++) {
-						int[] index = new int[1];
-						index[0] = i;
-						System.out.println(var.get(index));
-					}
+				} else if(nVar.length>0){
+					iterar(var, ix, 0);
 				}
-				System.out.println(nVar.toString());
+				
+					
+//				if(nVar.length==0) {
+//					System.out.println(var.get(nVar));
+//				} else if(nVar.length==1){
+//					for (int i=0; i<nVar[0]; i++) {
+//						int[] index = new int[1];
+//						index[0] = i;
+//						System.out.println(var.get(index));
+//					}
+//				} else if(nVar.length==2) {
+//					int[] ix = new int[nVar.length];
+//					for (int i=0; i<nVar[0]; i++) {
+//						ix[0] = i;
+//						System.out.print("{\n\t");
+//						for (int j=0; j<nVar[1]; j++) {
+//							ix[1] = j;
+//							System.out.print(var.get(ix)+", ");
+//						}
+//						System.out.println("\n},");
+//					}
+//				}
+//				System.out.println(nVar.toString());
 				
 				
 				// just throw away the data, read it in for timing and tuning
 				var.copyout(new int[var.getRank()], var.getLengths());
 			}
+		} catch (java.io.IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void iterar(Variable var, int[] ix, int index) {
+		try {
+			System.out.print("[\n\t");
+			for (int i=0; i<var.getLengths()[index]; i++) {
+				ix[index] = i;
+				if(index<ix.length-1) {
+					iterar(var, ix, index+1);
+				} else {
+					System.out.print(var.get(ix)+", ");
+				}
+			}
+			System.out.println("\n],");
 		} catch (java.io.IOException e) {
 			e.printStackTrace();
 		}
