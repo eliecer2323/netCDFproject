@@ -7,12 +7,10 @@ import javax.swing.JFileChooser;
 
 class Controlador implements ActionListener {
 
-	private Vista ventana;
 	private Modelo modelo;
 
 	public Controlador(Vista aThis) {
-		ventana = aThis;
-		modelo = ventana.getModelo();
+		modelo = aThis.getModelo();
 	}
 
 	@Override
